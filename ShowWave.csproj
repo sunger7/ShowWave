@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icons8-plot-80.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MathNet.Numerics, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MathNet.Numerics.4.15.0\lib\net461\MathNet.Numerics.dll</HintPath>
@@ -122,6 +125,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icons8-plot-80.ico" />
     <Content Include="packages\MathNet.Numerics.4.15.0\icon.png" />
     <Content Include="packages\MathNet.Numerics.4.15.0\lib\net40\MathNet.Numerics.dll" />
     <Content Include="packages\MathNet.Numerics.4.15.0\lib\net40\MathNet.Numerics.xml" />
