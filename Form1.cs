@@ -14,13 +14,13 @@ namespace ShowWave
 {
     public partial class Form1 : Form
     {
-        int bottom = 15, top = 15, left = 35, right = 15;
+        int bottom = 20, top = 15, left = 35, right = 15;
         int scale = 1;
         int MainFrequency = 25;
         double[] time,wavelet;
         double t_start, t_end, t_sample;
         double curxmin=0, curxmax=1, curymin=-1, curymax=1;
-        Font fnt_tick = new Font("Times New Roman", 12.0f);
+        Font fnt_tick = new Font("Times New Roman", 18.0f);
         Pen Pen_wave = new Pen(Color.Red,2);
         public List<Reflectivity> reflect = new   List<Reflectivity>();
         public Reflectivity reflect_select;
@@ -118,6 +118,8 @@ namespace ShowWave
                 myDialog mydlg = new myDialog(UpdateReflect);
                 Last = reflect_select;
                 mydlg.SetValue(reflect_select.x, reflect_select.strength);
+                Point pt = PointToScreen(ValuedlgLoc);
+                mydlg.Location = new Point(pt.X,pt.Y);
                 mydlg.Show();
                 IsSelect = false;
 
@@ -222,6 +224,8 @@ namespace ShowWave
             {
                 myDialog2 mydlg = new myDialog2(List_multSelect,UpdateReflectMult);
                 //Last = reflect_select;
+                Point pt = PointToScreen(ValuedlgLoc);
+                mydlg.Location = new Point(pt.X, pt.Y);
                 mydlg.Show();
                 IsMultSelect = false;
 
@@ -230,6 +234,9 @@ namespace ShowWave
 
         private void Drawtick(Graphics g, double xmin = -1, double xmax = 1, double ymin = -1, double ymax = 1)
         {
+            GraphicsPath blackfont = new GraphicsPath();
+
+            g.SmoothingMode = SmoothingMode.HighQuality;
             double xlim = xmax - xmin;
             double ylim = ymax - ymin;
             int nSpan = 10;
@@ -247,7 +254,10 @@ namespace ShowWave
                 double x_f_tick = Math.Round(xmin + xspan * i,2);
                 if (Math.Abs(x_f_tick / xspan) < 1e-6) x_f_tick = 0;
                 SizeF sz = g.MeasureString(x_f_tick.ToString(), fnt_tick);
-                g.DrawString(x_f_tick.ToString(), fnt_tick,Brushes.Black, ((pictureBox1.Width - left - right)*i / nSpan  + left-sz.Width/2) * scale, (pictureBox1.Height - bottom )*scale);
+                blackfont.AddString(x_f_tick.ToString(), fnt_tick.FontFamily, (int)fnt_tick.Style, fnt_tick.Size,
+                    new PointF(((pictureBox1.Width - left - right) * i / nSpan + left - sz.Width / 3) * scale,
+                    (pictureBox1.Height - bottom) * scale), StringFormat.GenericDefault);
+                //g.DrawString(x_f_tick.ToString(), fnt_tick,Brushes.Black, ((pictureBox1.Width - left - right)*i / nSpan  + left-sz.Width/2) * scale, (pictureBox1.Height - bottom )*scale);
                 //现y tick
                 g.DrawLine(Pens.Black, left * scale, 
                     -(pictureBox1.Height - top - bottom)*i / nSpan   * scale + pictureBox1.Height * scale - bottom * scale ,
@@ -257,9 +267,14 @@ namespace ShowWave
                 double y_f_tick = Math.Round(ymin + yspan * i,2);
                 if (Math.Abs(y_f_tick / yspan) < 1e-6) y_f_tick = 0;
                 SizeF ysz = g.MeasureString(y_f_tick.ToString(), fnt_tick);
-                g.DrawString(y_f_tick.ToString(), fnt_tick, Brushes.Black, 0, -(pictureBox1.Height - top - bottom)*i / nSpan  * scale + pictureBox1.Height * scale - bottom * scale - ysz.Height/2 * scale);
+                blackfont.AddString(y_f_tick.ToString(), fnt_tick.FontFamily, (int)fnt_tick.Style, fnt_tick.Size,
+                new PointF(0,-(pictureBox1.Height - top - bottom) * i / nSpan * scale + pictureBox1.Height * scale - bottom * scale - 1*ysz.Height / 3 * scale), 
+                StringFormat.GenericDefault);
+
+                //g.DrawString(y_f_tick.ToString(), fnt_tick, Brushes.Black, 0, -(pictureBox1.Height - top - bottom)*i / nSpan  * scale + pictureBox1.Height * scale - bottom * scale - ysz.Height/2 * scale);
 
             }
+            g.FillPath(Brushes.Black, blackfont);    //Fill the font with White brush
 
         }
 

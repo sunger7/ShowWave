@@ -104,6 +104,10 @@
       <DependentUpon>ValueDialg.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="packages\MathNet.Numerics.4.15.0\.signature.p7s" />
+    <None Include="packages\MathNet.Numerics.4.15.0\MathNet.Numerics.4.15.0.nupkg" />
+    <None Include="packages\SignalProcessor.0.1.27\.signature.p7s" />
+    <None Include="packages\SignalProcessor.0.1.27\SignalProcessor.0.1.27.nupkg" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -116,6 +120,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages\MathNet.Numerics.4.15.0\icon.png" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\net40\MathNet.Numerics.dll" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\net40\MathNet.Numerics.xml" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\net461\MathNet.Numerics.dll" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\net461\MathNet.Numerics.xml" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\netstandard1.3\MathNet.Numerics.dll" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\netstandard1.3\MathNet.Numerics.xml" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\netstandard2.0\MathNet.Numerics.dll" />
+    <Content Include="packages\MathNet.Numerics.4.15.0\lib\netstandard2.0\MathNet.Numerics.xml" />
+    <Content Include="packages\SignalProcessor.0.1.27\lib\netstandard2.0\SignalProcessor.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
