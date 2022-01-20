@@ -34,7 +34,6 @@ D:\VScode\ShowWave\bin\Release\ShowWave.pdb
 D:\VScode\ShowWave\bin\Release\MathNet.Numerics.dll
 D:\VScode\ShowWave\bin\Release\SignalProcessor.dll
 D:\VScode\ShowWave\bin\Release\MathNet.Numerics.xml
-D:\VScode\ShowWave\obj\Release\ShowWave.csproj.AssemblyReference.cache
 D:\VScode\ShowWave\obj\Release\ShowWave.csproj.SuggestedBindingRedirects.cache
 D:\VScode\ShowWave\obj\Release\ShowWave.Form1.resources
 D:\VScode\ShowWave\obj\Release\ShowWave.myDialog.resources

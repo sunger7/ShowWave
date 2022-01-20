@@ -113,6 +113,7 @@ namespace ShowWave
 
         private void setValueToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             if (IsSelect)
             {
                 myDialog mydlg = new myDialog(UpdateReflect);
@@ -158,6 +159,7 @@ namespace ShowWave
                 //Last = select;
                 //Console.WriteLine(Last.x.ToString()+','+Last.strength.ToString());
                 //reflect.Add(new Reflectivity(select.x, select.strength));
+
                 pictureBox1.Refresh();
             }
         }
@@ -348,9 +350,7 @@ namespace ShowWave
 
         //选择反射系数 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            
-            
+        {                        
             foreach (Reflectivity i in reflect)
             {
                 Rectangle rct = new Rectangle((int)Loc2Screen(i.x,i.strength).X-2, 
@@ -406,12 +406,13 @@ namespace ShowWave
                             i.IsSelected = true;
                             IsSelect = true;
                             Index_reflect_select = count;
+                            //Console.WriteLine(IsSelect+"_"+ DateTime.Now);
+                            break;
                         }
                         count += 1;
                     }
-
+                    
                     contextMenuStrip2.Show(PointToScreen(e.Location));
-                    //valueDialg1.Location = e.Location;
                     ValuedlgLoc = e.Location;
                     //pictureBox1.Invalidate(true);
                     //pictureBox1.Update();
@@ -420,7 +421,6 @@ namespace ShowWave
                 else
                 {
                     contextMenuStrip1.Show(PointToScreen(e.Location));
-                    //valueDialg1.Location = e.Location;
                     ValuedlgLoc = e.Location;
 
                 }
@@ -445,7 +445,7 @@ namespace ShowWave
                     }
 
                     Rectangle rct = new Rectangle((int)Loc2Screen(i.x, i.strength, curxmin, curxmax, curymin, curymax).X - 5,
-                        (int)top, 10, 100);
+                        (int)top, 20, 100);
                     //判断点击点的位置附近 是否有反射点
                     if (rct.Contains(e.Location))
                     {
@@ -511,7 +511,6 @@ namespace ShowWave
             }
         }
 
-
         //反射序列的比较器
         private static int CompareDinosByLength(Reflectivity x, Reflectivity y)
         {
@@ -519,12 +518,21 @@ namespace ShowWave
                 return 1;
             else return -1;
         }
+        public static void PrintPropreties(object obj)
+        {
+            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(obj))
+            {
+                string name = descriptor.Name;
+                object value = descriptor.GetValue(obj);
+                Console.WriteLine("{0}={1}", name, value);
+            }
+        }
 
 
     }
 }
 
-public class Reflectivity
+public class Reflectivity:Object
 {
     public double x;
     public double strength;
@@ -536,3 +544,4 @@ public class Reflectivity
         IsSelected = false;
     }
 }
+
