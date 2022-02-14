@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "43aa4ac6-0ea5-42d1-92fb-942ceb9f2d92": {
+      "ProjectGuid": "43aa4ac6-0ea5-42d1-92fb-942ceb9f2d92",
+      "DisplayName": "ShowWave",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "杂项文件",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 1
+}

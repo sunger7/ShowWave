@@ -23,7 +23,7 @@ namespace ShowWave
         Font fnt_tick = new Font("Times New Roman", 18.0f);
         Pen Pen_wave = new Pen(Color.Red,2);
         public List<Reflectivity> reflect = new   List<Reflectivity>();
-        public Reflectivity reflect_select;
+        public Reflectivity reflect_select = new  Reflectivity(1,1);
         int Index_reflect_select;
         bool IsSelect = false;
         bool IsMultSelect = false;
@@ -54,6 +54,7 @@ namespace ShowWave
             time = new double[samples];
             int len_wavelet = 120;
             wavelet = new double[len_wavelet];
+            reflect_select.IsSelected = false;
             unsafe
             {
                 //记录的时间序列
@@ -123,7 +124,6 @@ namespace ShowWave
                 mydlg.Location = new Point(pt.X,pt.Y);
                 mydlg.Show();
                 IsSelect = false;
-
             }
         }
         //只选中一个反射系数 量，Isupdate同步更新，上一次更新要删除
@@ -139,27 +139,8 @@ namespace ShowWave
             {
                 foreach(Reflectivity i in reflect)
                 {
-                    if (i.IsSelected) { i.x = select.x; i.strength = select.strength; }
-                        
-                    //if (Math.Abs(i.x - Last.x) < t_sample)
-                    //{
-                    //    reflect.Remove(i);
-                    //    break;
-                    //}
-                    //if(Math.Abs(i.x - select.x) < t_sample)
-                    //{
-                    //    select.strength += i.strength;
-                    //    if (select.strength > 1) select.strength = 1;
-                    //    else if (select.strength < -1) select.strength = -1;
-                    //    reflect.Remove(i);
-                    //    break;
-                    //}
+                    if (i.IsSelected) { i.x = select.x; i.strength = select.strength; }                        
                 }
-                //bool a = reflect.Remove(Last);
-                //Last = select;
-                //Console.WriteLine(Last.x.ToString()+','+Last.strength.ToString());
-                //reflect.Add(new Reflectivity(select.x, select.strength));
-
                 pictureBox1.Refresh();
             }
         }
@@ -176,45 +157,25 @@ namespace ShowWave
                 }
                 foreach (Reflectivity i in selects)
                 {
+                    i.IsSelected = false;
                     reflect.Add(new Reflectivity(i.x, i.strength));
                 }
+                List_multSelect.Clear();
                 pictureBox1.Refresh();
             }
             else
             {
-                //foreach (Reflectivity last in List_Last_multSelect)
-                //{
-                    //foreach (Reflectivity i in reflect)
-                    //{
-                        //if (i.IsSelected)
-                        //{
-                        //i.x = select.x; i.strength = select.strength;
-                    //}
-                        //if (Math.Abs(i.x - last.x) < t_sample + 0.001F)
-                        //{
-                        //    reflect.Remove(i);
-                        //    break;
-                        //}
-
-                    //}
-                //}
-                //List_Last_multSelect.Clear();
-                //foreach (Reflectivity oneSel in selects)
-                //{
                 int k = 0;
                     foreach (Reflectivity i in reflect)
                     {
                         if (i.IsSelected)
                         {
                             i.x = selects[k].x; i.strength = selects[k].strength;
-                        k++;
+                            k++;
+
                         }
 
                     }
-                    //List_Last_multSelect.Add(oneSel);
-                    //bool a = reflect.Remove(Last);
-                    //reflect.Add(oneSel);                    
-                //}
                 pictureBox1.Refresh();
             }
         }
@@ -225,7 +186,7 @@ namespace ShowWave
             if (IsMultSelect)
             {
                 myDialog2 mydlg = new myDialog2(List_multSelect,UpdateReflectMult);
-                //Last = reflect_select;
+                
                 Point pt = PointToScreen(ValuedlgLoc);
                 mydlg.Location = new Point(pt.X, pt.Y);
                 mydlg.Show();
@@ -310,8 +271,6 @@ namespace ShowWave
                 for(int i = 0; i < time.Length; i++)
                 {
                     points[i] = Loc2Screen(time[i], conv_result[i], curxmin, curxmax, curymin, curymax);
-                //g.DrawLine(Pen_wave, Loc2Screen(time[i-1],conv_result[i-1],curxmin,curxmax,curymin,curymax),
-                //        Loc2Screen(time[i], conv_result[i], curxmin, curxmax, curymin, curymax));
                 }
                 g.DrawCurve(Pen_wave, points);
             }
@@ -354,7 +313,8 @@ namespace ShowWave
             foreach (Reflectivity i in reflect)
             {
                 Rectangle rct = new Rectangle((int)Loc2Screen(i.x,i.strength).X-2, 
-                    (int)Math.Ceiling(Loc2Screen(i.x, i.strength).Y),2, 
+                    (int)Math.Ceiling(Loc2Screen(i.x, i.strength).Y),
+                    2, 
                     (int)Math.Ceiling(Loc2Screen(i.x, 0).Y- (int)Math.Ceiling(Loc2Screen(i.x, i.strength).Y)));
                 //判断点击点的位置附近 是否有反射点
                 if (rct.Contains(e.Location))
@@ -398,15 +358,24 @@ namespace ShowWave
                         }
 
                         Rectangle rct = new Rectangle((int)Loc2Screen(i.x, i.strength, curxmin, curxmax, curymin, curymax).X - 5,
-                            (int)top, 10, 100);
+                            (int)top, 10, (int)height);
                         //判断点击点的位置附近 是否有反射点
                         if (rct.Contains(e.Location))
                         {
-                            reflect_select = i;
+                            if(reflect_select.IsSelected )
+                            {
+                                Reflectivity find =  reflect.Find(x => (x.x - reflect_select.x)<=0.002);
+                                find.IsSelected = false;
+
+                            }
+                            
                             i.IsSelected = true;
+                            reflect_select = i;
                             IsSelect = true;
                             Index_reflect_select = count;
+
                             //Console.WriteLine(IsSelect+"_"+ DateTime.Now);
+                            pictureBox1.CreateGraphics().DrawEllipse(Pens.Red, rct.X + 2, rct.Y -3, 6, 6);
                             break;
                         }
                         count += 1;
@@ -414,9 +383,6 @@ namespace ShowWave
                     
                     contextMenuStrip2.Show(PointToScreen(e.Location));
                     ValuedlgLoc = e.Location;
-                    //pictureBox1.Invalidate(true);
-                    //pictureBox1.Update();
-                    //pictureBox1.Refresh();
                 }
                 else
                 {
@@ -452,10 +418,12 @@ namespace ShowWave
                         //画强调圆
                         //bg.DrawEllipse(Pens.Black, (int)Loc2Screen(i.x, i.strength).X - 2,
                         //    (int)Math.Ceiling(Loc2Screen(i.x, i.strength).Y)+2,2,2);
+                        pictureBox1.CreateGraphics().DrawEllipse(Pens.Red, rct.X + 2, rct.Y - 3, 6, 6);
                         i.IsSelected = true;
                         List_multSelect.Add(i);
                         IsMultSelect = true;
                         //Index_reflect_select = count;
+
                     }
                     count += 1;
                 }
@@ -463,7 +431,10 @@ namespace ShowWave
                 ValuedlgLoc = e.Location;
             }
             if (e.Button == MouseButtons.Left && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) != Keys.Control)
+            {
                 List_multSelect.Clear();
+                pictureBox1.Invalidate();
+            }
 
         }
 
@@ -475,12 +446,20 @@ namespace ShowWave
         private void DrawReflct(Graphics g, double xmin = -1, double xmax = 1, double ymin = -1, double ymax = 1)
         {
             g.DrawLine(Pen_wave, Loc2Screen(xmin,0,xmin,xmax,ymin,ymax), Loc2Screen(xmax, 0, xmin, xmax, ymin, ymax));
-            foreach(Reflectivity i in reflect)
+            g.SmoothingMode = SmoothingMode.HighSpeed;
+            Pen scaledPen = new Pen(Brushes.Black, 2);
+            foreach (Reflectivity i in reflect)
             {
-                g.DrawLine(Pens.Black, Loc2Screen(i.x, 0, xmin, xmax, ymin, ymax), Loc2Screen(i.x, i.strength, xmin, xmax, ymin, ymax));
+
+                g.DrawLine(scaledPen, Loc2Screen(i.x, 0, xmin, xmax, ymin, ymax).X,
+                    Loc2Screen(i.x, 0, xmin, xmax, ymin, ymax).Y,
+                    Loc2Screen(i.x, 0, xmin, xmax, ymin, ymax).X,
+                    Loc2Screen(i.x, i.strength, xmin, xmax, ymin, ymax).Y);
+                //Console.WriteLine("loc"+Loc2Screen(i.x, 0, xmin, xmax, ymin, ymax).X + ',' + Loc2Screen(i.x, i.strength, xmin, xmax, ymin, ymax).X);
             }
+            g.SmoothingMode = SmoothingMode.HighQuality;
         }
-        //坐标值转换为屏幕坐标
+        //坐标值转换为窗口坐标
         private PointF Loc2Screen(double x, double y, double xmin = -1, double xmax = 1, double ymin = -1, double ymax = 1)
         {
             return new PointF(Convert.ToSingle((x - xmin) / (xmax - xmin) * (pictureBox1.Width - left - right) * scale + left * scale),

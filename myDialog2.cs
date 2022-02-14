@@ -64,6 +64,7 @@ namespace ShowWave
                     selects[i].x -= 0.002F;
             }
             last_value = value;
+            UpdateReflect(selects, false);
             this.Close();
         }
 
