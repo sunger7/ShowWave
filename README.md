@@ -6,4 +6,4 @@
 可以设置单个反射系数 的位置与强度
 ![img](https://github.com/sunger7/ShowWave/blob/master/picture/GIF%202022-2-14%2017-02-46.gif)
 也可以同时调整多个反射系数 的强度
-![img](https://github.com/sunger7/ShowWave/blob/master/picture/GIF%202022-1-20%2019-45-58.gif)
+![img](https://github.com/sunger7/ShowWave/blob/master/picture/GIF%202022-2-14%2017-06-44.gif)
